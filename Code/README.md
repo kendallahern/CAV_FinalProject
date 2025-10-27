@@ -1,0 +1,72 @@
+## Quick Summary
+
+- Use a tiny feed-forward neural network (2-3 layers)
+- Train it on a simple 2D toy dataset
+- Encode the network as linear arithmetic and piecewise ReLU constraints in Z3
+- Check a robustness property by asking Z3 for a counter exammple (SAT -> adversarial example)
+
+#### Some Reading Links:
+
+*Pdfs can be found in the directory folder.*
+
+---
+
+# Week 1: 
+
+### Environment Setup
+
+Create the virtual environment to isolate dependencies. Make sure z3 is installed and working correctly using the dummy `z3_test.py` script that should print *unsat*.
+
+### Dataset and Network Choice for Initial Creation and Debugging Purposes
+
+I chose to use the `sklearn.datasets.make_moons` dataset as my inital experimental dataset. I wanted to keep it small becuase I know that SMT encodings will scale poorly because each neuron will add variables and piecewise cases - if I keep the input dimenstionality to 2D as in make moons and pair it with a small network, I can get a tractable verification for Z3 and get a working pipeline quickly. Then as time permits with this project I can try a small MNIST subset - maybe 3D or downsampled - and see how it works.
+
+**Architecure Idea:** Input(2) -> Dense(8) ReLU -> Dence(4) ReLU -> Dense(2) (logits)
+
+I will use PyTorch to save weights and biases of the model so that I can hardcode those floats into the SMT model. 
+
+#### Formal Property to Verify:
+
+Let $x_0 \in  \mathbb{R}^n$ be a (test) input classified by the network class as class $c$. For a chosen $\epsilon >0$ we wnat to verifty that:
+
+- For all $x$ with $|| x- x_0 ||_{\infty} \leq \epsilon$, the network's predicted class remains $c$. 
+
+Using that, we want to use the SMT checker performed on the *negation* because we are interested in the Satisifiability of our query.
+- `x_i in [x0_i - eps, x0_i + eps]` for network computation and constraints
+- Asserts $\exists x$ within those constraints such that $argmax(output) \neq c$
+    - $Or(ouput[j] \geq output[c], for some j != c)$
+- SAT if adverserial input found AKA counterexample
+- UNSAT if propoerty holds because its proved with the encoding
+
+
+1. Introduce Real variables
+    - $x_0, x_1, ..., x_{n-1}$ which will be constrained to the $\epsilon$ box
+    - For each neuron that I have in the hidden layers, introduce a Real variable representing the pre-activation $z$ and maybe the post-activation/post-ReLU $a$
+2. Layer constraints
+    - For a layer with weights `W` and biases `b` and previous layer actications `aprev`, the linear constraints that I want to add would be: $z_i = \sum _j W[i][j] * aprev_j +b_i$
+    - In Z3 thats: `s.add(z_i == Sum([RealVal(W_ij)*a_prev_j, ...]) + RealVal(b_i))`
+3. ReLU Encodings
+    - There are two possibilites that I saw referenced throughout the literature, want to include both here in case the first one that I try does not work and I want to go back and try the other
+    - The simple version which should work well for the smaller testing but may have a problem when I start to scale up would just be to sue the simple If/Then encoding that would work directly in Z3: `a_i = If(z_i >= 0, z_i, 0)`
+    - I could also do **Phase Boolean Encoding** which introduces Bool phase_i and constraints and is supposed to me more friendly at scale. But I have never worked with that before and will probably try to stay away from that if possible
+
+    ```csharp
+    phase_i => a_i == z_i
+    Not(phase_i) => (a_i == 0 and z_i <= 0)
+    ```
+
+4. Output/Classification Constraints
+- After the final layer of my NN I have logits $o_0, o_1, ..., o_{k-1}
+- For my target class $c$, the negated property is `Or([o_j >= o_c for j != c])
+
+5. Introduce small distruption (perturbation) constraints
+- For each input dimension `i`, constrain `x_i >= x0_i - eps` and `x_i <= x0_i + eps`
+
+6. Solver check
+
+### Tips from some of the Papers
+
+- SMT-based checking for ReLU networks is very compute-intensive so its best to start with 2D + tiny nets. Scaling with Z3 might not work well so may want to look into Marabou or more specialized verifiers if you want to scale with more neurons. Those verificers implement optimizations like case splitting, bound propagation, and specialized simplex extenstions (don't know what those are but might be cool to investigate more)
+- **Encoding choices matter** so may have to figure out if If vs explicit Boolean phase variables works better for the scale that I am operating at — explicit Booleans + clever search heuristics can help the solver but complicate implementation. Read Reluplex/Marabou papers for solver strategies if I decide to go in that direction
+- I should use Real (rationals) in Z3 for exactness. Converting many floats to RealVal is fine but may slow things down quite a bit and sometimes using Rational approximations helps reproducibility.
+- Z3 returns a model with rational values; When I am trying to extract the counter example, I have to convert to floats for re-running through the original network to verify the misclassification.
