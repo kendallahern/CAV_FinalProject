@@ -70,3 +70,49 @@ Using that, we want to use the SMT checker performed on the *negation* because w
 - **Encoding choices matter** so may have to figure out if If vs explicit Boolean phase variables works better for the scale that I am operating at — explicit Booleans + clever search heuristics can help the solver but complicate implementation. Read Reluplex/Marabou papers for solver strategies if I decide to go in that direction
 - I should use Real (rationals) in Z3 for exactness. Converting many floats to RealVal is fine but may slow things down quite a bit and sometimes using Rational approximations helps reproducibility.
 - Z3 returns a model with rational values; When I am trying to extract the counter example, I have to convert to floats for re-running through the original network to verify the misclassification.
+
+## To Run Week1 Stuff
+
+In virtual environment:
+
+`cd week1`
+
+`python3 train_toy_network.py`
+
+ex output: 
+```bash
+Epoch 50, loss=0.2798, train_acc=0.887
+Epoch 100, loss=0.1225, train_acc=0.958
+Epoch 150, loss=0.0775, train_acc=0.971
+Epoch 200, loss=0.0671, train_acc=0.975
+Test accuracy: 1.000
+```
+
+`python3 verify_tinynet.py`
+
+ex output:
+
+```bash
+Epoch 50, loss=0.3983, train_acc=0.879
+Epoch 100, loss=0.3040, train_acc=0.887
+Epoch 150, loss=0.2515, train_acc=0.917
+Epoch 200, loss=0.1617, train_acc=0.954
+Test accuracy: 0.950
+Saved weights to tiny_net_weights.json
+Test sample index 0
+True label: 1, Predicted class: 1
+Input (normalized): [-0.02015479 -1.11107685]
+
+Running Z3 solver...
+Z3 result: unsat
+
+Property holds!
+No adversarial example found within ε = 0.05.
+```
+
+![alt text](week1/Figure_1.png)
+
+---
+
+# Week 2
+
