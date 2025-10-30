@@ -1,0 +1,17 @@
+{
+  "small": {
+    "train_acc": 0.9024999737739563,
+    "test_acc": 0.8899999856948853,
+    "file": "models/small_net_weights.json"
+  },
+  "tiny": {
+    "train_acc": 0.9775000214576721,
+    "test_acc": 0.9800000190734863,
+    "file": "models/tiny_net_weights.json"
+  },
+  "wide": {
+    "train_acc": 0.9825000166893005,
+    "test_acc": 0.9800000190734863,
+    "file": "models/wide_net_weights.json"
+  }
+}

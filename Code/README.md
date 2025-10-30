@@ -116,3 +116,13 @@ No adversarial example found within ε = 0.05.
 
 # Week 2
 
+**Plan for Week 2**
+1. Train a few small networks (to include variants from the week one Tiny Net)
+2. Improve the SMT encoding pipeling
+    - compute pre-activation bounds with interval arithmetic. This will help determine which ReLus are active/inactive so that expensive Boolean case splits can be avoided (from abstract interpretation/ DeepPoly/ ERAN papers)
+    - For the neurons in the NN with an ambiguous sign (their pre-activation interval straddles 0), encode using `If`. The Reluplex and Marabou papers talk about how phase splitting and lazy case-splitting improve the solver's performance as networks get larger
+3. For each test point, check the ball robustness with different $\epsilon$ values.
+    - Record solver outcome (sat/unsat)
+    - Record runtime
+
+I want to start by creating 2 new files: `train_variants.py` and `verify_improved.py` which will train new models and imrpove the verification script respectively.
