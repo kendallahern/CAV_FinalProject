@@ -2,9 +2,10 @@
 # Modular SMT encoder using Z3. Exposes verify_local_robustness(...) which returns
 # a small dict: result, time_s, counterexample (if any), num_ambiguous.
 
-from z3 import Solver, Real, RealVal, Bool, If, Sum, Or, Implies, Not
+from z3 import *
 import numpy as np
 import time
+from fractions import Fraction
 
 def ibp_bounds(weights_biases, x0, eps):
     """
@@ -153,7 +154,7 @@ def verify_local_robustness(weights_biases, x0, eps, delta=0.0, phase_mode="if",
     t_after = time.time()
     elapsed = (t_after - t_before)
     out = {"result": str(res), "time_s": elapsed, "pred_class": pred, "ambiguous": ambiguous}
-    if res == s.sat:
+    if res == sat:
         m = s.model()
         ce = []
         for xi in x_vars:
@@ -163,7 +164,8 @@ def verify_local_robustness(weights_biases, x0, eps, delta=0.0, phase_mode="if",
                 ce.append(float(v.as_decimal(12)))
             except Exception:
                 try:
-                    ce.append(float(v.as_long()))
+                    ce.append(float(Fraction(v.as_fraction())))
+                    #ce.append(float(v.as_long()))
                 except Exception:
                     # final fallback: string parse
                     ce.append(float(str(v)))
