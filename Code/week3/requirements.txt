@@ -1,0 +1,9 @@
+torch>=2.0
+torchvision>=0.15
+numpy
+pandas
+matplotlib
+scikit-learn
+z3-solver
+tqdm
+Pillow

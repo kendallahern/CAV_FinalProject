@@ -126,3 +126,23 @@ No adversarial example found within ε = 0.05.
     - Record runtime
 
 I want to start by creating 2 new files: `train_variants.py` and `verify_improved.py` which will train new models and imrpove the verification script respectively.
+
+---
+
+# Week 3
+
+My plan for this week is to pick one advanced, but traceable monedl (MNIST small convnet) and perform 8 in-depth case studies that combine PGD/CW attacks, interval/DeepPoly triage, and exact SMT checking with a z# solver to explain why the model is or is not rpbust for different epsilon values.
+
+**PGD:** Projected Gradient Descent. iterative attack that repeatedly applies small steps in the direction of the gradient loss functionn to maximize the prediction error. at each iteratio, the perturbed input is projected into a predefined feasible set around the original input to ensure that the total perturbation remains small and visually inperceptible
+
+**CW:** Carlini & Wagner. more sophisticated, optimixzation based method. Solves a complex optimization problem to find the minimal perturbation required to cause a misclassification with a high degree of confidence. More computationally intensive, so unsure if I will be able to implement but want to try.
+
+For each case study:
+1. Emperical search: run strong PGD (multi-restart)and CW to find adverserial examples incaise eps - hopefully fast and good to find easy failures.
+2. Abstract raiageL compute the IBD/DeepPoly bounds for the eps-ball to see if the point is provably safe or clearly unsafe or amiguous. Right now I am starting with Z3 but may go to ERAN+Marabou which was suggested by many of the papers depending on the results of this experimentation
+3. SMT exact check with Z3: for ambioguous cases, encdoe the network and eps-ball into Z3 and ask for a counterexample (get from negated universal property). From Reluplex paper
+    - if Z3 returns `sat`, get the exact counter example
+    - if `unsat`, proof with encoding
+4. Deeper analysis of any counter example: Look at per-layer pre-post activations, ReLU phase flips, activation map visualizations, gradient/attribution maps, and minimal vectory space required (binary search and attack). Want a WHY the netwrok failed
+
+### Implementation Notes
