@@ -62,9 +62,11 @@ def train_and_save(out_prefix, epochs=5):
     #set device for computation and load the dataset
     device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
     print("Device:", device)
-    transform = transforms.Compose([transforms.ToTensor()])
+    #convert to tensors
+    transform = transforms.Compose([transforms.ToTensor()])             
     trainset = datasets.MNIST(root="data", train=True, download=True, transform=transform)
     testset  = datasets.MNIST(root="data", train=False, download=True, transform=transform)
+    #handle the batching and shufflint
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True)
     testloader  = torch.utils.data.DataLoader(testset, batch_size=256, shuffle=False)
 
@@ -89,6 +91,7 @@ def train_and_save(out_prefix, epochs=5):
             opt.step()                                  # update weights
             running += loss.item() * xb.size(0)         #accumulate batch loss (scaled by batch size)
 
+        #average training loss for each epoch
         print(f"Epoch {ep+1}/{epochs} avg loss {running/len(trainset):.4f}")
 
     # set model to eval mode
@@ -105,17 +108,18 @@ def train_and_save(out_prefix, epochs=5):
     test_acc = correct / total
     print("Test acc:", test_acc)
 
-    # save
+    # save trainged mode and metadata
     os.makedirs("models", exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    pth = f"models/{timestamp}_mnist_conv.pth"
-    jsonf = f"models/{timestamp}_mnist_conv.json"
-    onnxf = f"models/{timestamp}_mnist_conv.onnx"
+    pth = f"models/{timestamp}_mnist_conv.pth"          #weights
+    jsonf = f"models/{timestamp}_mnist_conv.json"       #JSON export
+    onnxf = f"models/{timestamp}_mnist_conv.onnx"       #may or may not use this ONNX export
     torch.save(model.state_dict(), pth)
     export_weights_to_json(model, jsonf)
-    
-    # export onnx (optional)
-    dummy = torch.randn(1,1,28,28).to(device)
+
+    # MAY COMMENT OUT
+    #export to ONNX format for interoperability
+    dummy = torch.randn(1,1,28,28).to(device)       #dummy input to trace model graph
     try:
         torch.onnx.export(model, dummy, onnxf, opset_version=12)
         print("Exported ONNX to", onnxf)
@@ -126,6 +130,8 @@ def train_and_save(out_prefix, epochs=5):
     os.makedirs("results", exist_ok=True)
     logfile = "results/training_log.csv"
     write_header = not os.path.exists(logfile)
+
+    #append training info into a csv file with time stamps
     with open(logfile, "a", newline="") as f:
         writer = csv.writer(f)
         if write_header:
