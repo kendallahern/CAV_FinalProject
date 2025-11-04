@@ -144,5 +144,3 @@ For each case study:
     - if Z3 returns `sat`, get the exact counter example
     - if `unsat`, proof with encoding
 4. Deeper analysis of any counter example: Look at per-layer pre-post activations, ReLU phase flips, activation map visualizations, gradient/attribution maps, and minimal vectory space required (binary search and attack). Want a WHY the netwrok failed
-
-### Implementation Notes
