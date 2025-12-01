@@ -4,6 +4,8 @@ Kendall Ahern - December 2025
 
 Computer Aided Verification Final Project
 
+**GitHub Repo Link: https://github.com/kendallahern/CAV_FinalProject**
+
 ---
 
 ## Abstract
