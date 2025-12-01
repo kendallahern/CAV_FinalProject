@@ -1,0 +1,98 @@
+[
+  {
+    "index": 924,
+    "label": 2,
+    "margin": 0.0031576156616210938,
+    "orig_image_path": "results/candidates/images/orig_924.png",
+    "pgd": {
+      "0.007843": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_924_eps_2.png"
+      },
+      "0.019608": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_924_eps_5.png"
+      },
+      "0.039216": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_924_eps_10.png"
+      },
+      "0.078431": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_924_eps_20.png"
+      }
+    }
+  },
+  {
+    "index": 813,
+    "label": 9,
+    "margin": 0.013092994689941406,
+    "orig_image_path": "results/candidates/images/orig_813.png",
+    "pgd": {
+      "0.007843": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_813_eps_2.png"
+      },
+      "0.019608": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_813_eps_5.png"
+      },
+      "0.039216": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_813_eps_10.png"
+      },
+      "0.078431": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_813_eps_20.png"
+      }
+    }
+  },
+  {
+    "index": 9530,
+    "label": 9,
+    "margin": 0.021900177001953125,
+    "orig_image_path": "results/candidates/images/orig_9530.png",
+    "pgd": {
+      "0.007843": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_9530_eps_2.png"
+      },
+      "0.019608": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_9530_eps_5.png"
+      },
+      "0.039216": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_9530_eps_10.png"
+      },
+      "0.078431": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_9530_eps_20.png"
+      }
+    }
+  },
+  {
+    "index": 1232,
+    "label": 9,
+    "margin": 0.031026601791381836,
+    "orig_image_path": "results/candidates/images/orig_1232.png",
+    "pgd": {
+      "0.007843": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_1232_eps_2.png"
+      },
+      "0.019608": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_1232_eps_5.png"
+      },
+      "0.039216": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_1232_eps_10.png"
+      },
+      "0.078431": {
+        "found": true,
+        "adv_image_path": "results/candidates/images/adv_1232_eps_20.png"
+      }
+    }
+  }
+]
