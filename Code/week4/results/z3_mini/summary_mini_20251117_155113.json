@@ -1,0 +1,146 @@
+[
+  {
+    "index": 924,
+    "eps": 0.007843,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 62.090718030929565
+    }
+  },
+  {
+    "index": 924,
+    "eps": 0.019608,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.128220081329346
+    }
+  },
+  {
+    "index": 924,
+    "eps": 0.039216,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 66.93147897720337
+    }
+  },
+  {
+    "index": 924,
+    "eps": 0.078431,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 67.0718240737915
+    }
+  },
+  {
+    "index": 813,
+    "eps": 0.007843,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.923766136169434
+    }
+  },
+  {
+    "index": 813,
+    "eps": 0.019608,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.72846508026123
+    }
+  },
+  {
+    "index": 813,
+    "eps": 0.039216,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.468575954437256
+    }
+  },
+  {
+    "index": 813,
+    "eps": 0.078431,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.47301483154297
+    }
+  },
+  {
+    "index": 9530,
+    "eps": 0.007843,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.59298610687256
+    }
+  },
+  {
+    "index": 9530,
+    "eps": 0.019608,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.51985502243042
+    }
+  },
+  {
+    "index": 9530,
+    "eps": 0.039216,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.60723829269409
+    }
+  },
+  {
+    "index": 9530,
+    "eps": 0.078431,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.628170013427734
+    }
+  },
+  {
+    "index": 1232,
+    "eps": 0.007843,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.73446989059448
+    }
+  },
+  {
+    "index": 1232,
+    "eps": 0.019608,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.329479932785034
+    }
+  },
+  {
+    "index": 1232,
+    "eps": 0.039216,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.28737807273865
+    }
+  },
+  {
+    "index": 1232,
+    "eps": 0.078431,
+    "status": "ambiguous",
+    "z3_result": {
+      "result": "unknown",
+      "time_s": 60.14106798171997
+    }
+  }
+]

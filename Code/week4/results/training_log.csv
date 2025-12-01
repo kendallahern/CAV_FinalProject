@@ -1,0 +1,2 @@
+timestamp,model,test_acc,pth,json,onnx
+20251117_110717,mnist_conv,0.985,models/20251117_110717_mnist_conv.pth,models/20251117_110717_mnist_conv.json,models/20251117_110717_mnist_conv.onnx
