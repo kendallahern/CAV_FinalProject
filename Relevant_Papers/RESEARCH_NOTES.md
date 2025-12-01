@@ -126,3 +126,34 @@ DeepPoly is also capable of verifying complex specifications beyond the standard
 - To handle the inprecision caused by large angular ranges, DeepPoly uses a form of abstraction refinement that is based on trace partitioning. This means it involves subdividing the rotation angle into interval batches, computing the smallest common "bounding box" AKA region for each batch using interval analysis and then running the neural network analysis on these smaller, more precise regions.
 
 Overall this system implemetns a complete and parallelized verstion that was shown experimentally to be more precise that prior stat of the art tools like AI $^2$, Fast-Lin and DeepZ. Also maintains scalability particularly when applied to feed-forward networks. Also reduces the percentage of hidden units for which the ReLU transformer is inexact (hence the better precision. )
+
+---
+
+## Abstraction-Based Proof Production in Fomral Verification of Neural Networks
+
+Pdf: 
+[2506.09455v1.pdf](2506.09455v1.pdf)
+
+This paper talks about preliminary work that addresses the critical gap between achieving scalability in DNN verfication and mainitaing reliability through formal proof production. It lays the foundation for a novel framework that is designed to integrate abstraction nechniques (which are vital for overcoming the NP-complete complexity) directly into the formal proof generation pipeline - for a researcher focused on neural network verification.
+
+The proimary motivation the authors mentions is that while abstraction improves the scalability of a netwrok through simplification, the existing proof verification tools that are out there do not support abstraction based reasoning. Additionally, relying soleley on verification algorithms is insufficent, as errors in their implementation can compromise the soundess of the networks. Therefore, by generating formal proofs that can be checked by an independent program, the reliability of teh verifiers correctness can be enchances. 
+
+There are two main challenges mentioned:
+1. Enabling proof production for abstraction based solvers
+2. Generating more compact proofs - verifiying a smaller abstract netwrok is typically faster and can lead to a potentially significant reduction in proof size
+
+The key concept that this paper introduces is the absrtract proof - which follows a modular structure that seperates the verfication challenge into two INDEPENDENT and verificable components: The Verification Proof for the Abstract Network and the Proof of Abstraction Correctntess. The verification proof demonstrates that the required specification (in the paper they use property $Q$) holds in the simplified abstract network $\hat{f}$. The proof of correctness, on the other hand, is essentially trying to show that its an over approximation. It is a fomral proof that the abstraction soundly approximates the original network $f$. This ensures that if the property holds for the abstract netwrok, then it is mathematically guaranteed to hold for the original netwrok as well. That is: $unsat(\langle \hat{f}, P,Q \rangle) \implies unsat(\langle f,P,Q \rangle)$. 
+
+As an bonus, this modularity makes the framwork agnostic to the specific DNN verifier and abstraction technique used (provided that the tools can generates the corresponding proof components that is).
+However, in the paper, the authors nots that they use two established verification tools to demonstrate their proposed framework.
+- For the verifier, they used Marabou, specifically the proof-producing version.
+- And for the abstraction engine, they used [CORA](https://www.researchgate.net/publication/283567778_An_Introduction_to_CORA_2015) which uses reachability analysis and an abstraction-refinement extenstion.
+
+The papers novel contribution is that it proposes the first method for generating formal proofs for the abstraction process itseld. The CORA abstraction method works by merging neurons with similar bounds to reduce the size of the netwrok. This results in an abstract network that outputs a SET of vectors that captures the deviation from the original network using interval biases. The proof scheme is depicted using rules like `triv-abs`, `base-abs`, and `lk-abs` which are used to establish the correctness of the neuron merging process layer-by-layer. The core principle is proving containment: if Property 1 (Neuron merging) is applied to obtain an abstract network $\hat{f'}$, then it must hold that $\forall x \in P: \hat{f} (x) \subseteq \hat{f'} (x)%$. This formally establishes that any subsequent abstract model SOUNDLY over-approximates the previous one which yields a complete proof of over-approximation for the entire network.. 
+
+Secondly, the paper talks about rpoving the abstract correctness component using Marabou. Since the resulting abstract network from CORA generalizes standard DNNs by having interval biases (in contrast to having scalar biases) and outputting a set of vectors, the verification query $\langle \hat{f},P,Q \rangle$ must be adapted to Marabou. The paper proposes two methods to encode the interval biases.
+1. Linear Inequalities: Express the linear constraints of the abstract netwrok directly as a pair of linear inequalities that reflect the lower and upper obounds of the abstracted bias interval
+2. Skip Connections: Introduce a fresh input variable for each boas term, connected via a weight-1 skip connection the relevant neuron, and extending the input property (P) to enforce the bias interval bounds on this new variable. 
+    - A weight-1 skip connection is justa varaint of the standard skip connection, which adds a layer's input directly to its output, where the weight of the path is 1 making it an Identity path.
+
+Both of these methods allow the query to be verified directly by Maraboue which enables the successful generation of the verification proof.
